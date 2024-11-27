@@ -33,16 +33,9 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./patientEase.sql:/docker-entrypoint-initdb.d/patientEase.sql
+      - ./queuebuddy.sql:/docker-entrypoint-initdb.d/queuebuddy.sql
     ports:
       - "3306:3306"
-
-  # S'en sert comme un client pour la base de données
-  # adminer: 
-  #     image: adminer
-  #     restart: always
-  #     ports:
-  #       - "8080:8080"
 
 volumes:
   mariadb_data:
