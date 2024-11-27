@@ -82,6 +82,13 @@ CREATE TABLE IF NOT EXISTS `feedback` (
   FOREIGN KEY (`id_ticket`) REFERENCES `ticket`(`id_ticket`)
 ) ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Création de l'utilisateur user_api (avec des privilèges restreints sur `queuebuddy`)
+-- -----------------------------------------------------
+CREATE USER IF NOT EXISTS '${DB_USER_API}'@'%' IDENTIFIED BY '${DB_PASSWORD_API}';
+GRANT SELECT, INSERT, UPDATE, DELETE ON queuebuddy.* TO '${DB_USER_API}'@'%';
+FLUSH PRIVILEGES;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

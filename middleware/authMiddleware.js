@@ -9,7 +9,7 @@ exports.validateSignup = [
     body('email')
         .isEmail().withMessage('Email invalide')
         .custom(async (value) => {
-            const [rows] = await db.promise().query('SELECT * FROM account WHERE email = ?', [value]);
+            const [rows] = await db.promise().query('SELECT * FROM staff WHERE mail = ?', [value]);
             if (rows.length > 0) {
                 throw new Error('L\'email est déjà utilisé');
             }
@@ -74,7 +74,7 @@ exports.verifyCredentialsExist = (req, res, next) => {
 
 exports.verifyUserExist = (req, res, next) => {
     const email = req.body.email ?? req.body[0].email
-    db.query('SELECT * FROM account WHERE email = ?', [email],
+    db.query('SELECT * FROM staff WHERE mail = ?', [email],
         (err, result) => {
             if (!err) {
                 if (result != "") {
@@ -92,7 +92,7 @@ exports.verifyUserExist = (req, res, next) => {
 exports.verifyPassword = (req, res, next) => {
     const email = req.body.email ?? req.body[0].email
     const password = req.body.password ?? req.body[0].password
-    db.query('SELECT * FROM account WHERE email = ?', [email],
+    db.query('SELECT * FROM staff WHERE mail = ?', [email],
         (err, result) => {
             bcrypt.compare(password, result[0].password, (err, result_bcrypt) => {
                 if (result_bcrypt) {
