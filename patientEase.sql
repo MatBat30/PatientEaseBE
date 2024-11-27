@@ -37,3 +37,9 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- Créer un utilisateur avec un accès global
+CREATE USER 'externe'@'%' IDENTIFIED BY 'externepswd';
+
+-- Accorder tous les privilèges sur toutes les bases de données
+GRANT ALL PRIVILEGES ON . TO 'externe'@'%' WITH GRANT OPTION;

@@ -53,6 +53,7 @@ exports.validateSignup = [
 ];
 
 exports.verifyCredentialsExist = (req, res, next) => {
+    
     let count = 0
     if (Array.isArray(req.body)) {
         count = req.body.length - 1

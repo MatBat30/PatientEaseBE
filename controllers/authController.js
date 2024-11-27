@@ -11,6 +11,7 @@ const sqlAddAccount = `INSERT INTO account (username, lastname, password, role, 
 
 // --- FONCTION ---
 exports.signin = (req, res) => {
+    console.log("signin")
     const token = jwt.sign({ 'iss': 'JWT course', "email": req.body.email }, "salt", { expiresIn: '1h' })
     res.cookie('userToken', token).status(200).json({ message: 'You are connected' })
 }
