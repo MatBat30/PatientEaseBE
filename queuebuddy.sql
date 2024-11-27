@@ -18,7 +18,7 @@ CREATE SCHEMA IF NOT EXISTS `queuebuddy` DEFAULT CHARACTER SET utf8 ;
 USE `queuebuddy` ;
 
 -- -----------------------------------------------------
--- Table `patiqueuebuddyentEase`.`account`
+-- Table `queuebuddy`.`account`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `queuebuddy`.`account` (
   `account_id` INT NOT NULL AUTO_INCREMENT,
