@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-WORKDIR /home/app
+WORKDIR /home/node/app
 
 COPY package*.json ./
 
@@ -13,6 +13,8 @@ RUN npm install -g nodemon
 # Crée un utilisateur afin de ne pas être en root
 USER node 
 
-COPY . .
+# WARNING à mettre ne production
+# COPY . .
 
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
+CMD ["nodemon", "--legacy-watch", "index.js"]
