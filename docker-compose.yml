@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "3000:3000"
+    volumes:
+       - .:/home/node/app
+       - ./node_modules:/home/node/app/node_modules
+
+    depends_on:
+      - mariadb
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: ${PORT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+
+    command: ["nodemon", "index.js"]
+
+  mariadb:
+    image: mariadb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./patientEase.sql:/docker-entrypoint-initdb.d/patientEase.sql
+    ports:
+      - "3306:3306"
+
+  # S'en sert comme un client pour la base de données
+  # adminer: 
+  #     image: adminer
+  #     restart: always
+  #     ports:
+  #       - "8080:8080"
+
+volumes:
+  mariadb_data:

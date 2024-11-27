@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /home/app
+
+COPY package*.json ./
+
+RUN npm install
+
+# WARNING à supprimer lors du déploiement en production
+# Installer nodemon globalement pour faciliter le développement
+RUN npm install -g nodemon 
+
+# Crée un utilisateur afin de ne pas être en root
+USER node 
+
+COPY . .
+
+CMD ["npm", "start"]
