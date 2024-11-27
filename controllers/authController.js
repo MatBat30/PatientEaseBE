@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 
 
 // --- REQUETES ---
-const sqlAddAccount = `INSERT INTO account (username, lastname, password, role, created_at, birthday, phone_number, email) VALUES (?,?,?,?,?,?,?,?);`
+const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance, date_creation, role) VALUES (?,?,?,?,?,?,?,?);`
 
 
 // --- FONCTION ---
@@ -26,14 +26,17 @@ exports.signup = async (req, res) => {
     const phone_number = req.body.phone_number
     const email = req.body.email
     const role = 1
-    const created_at = new Date().toLocaleString('fr-FR', {
+    const created_at = new Date().toLocaleDateString('fr-FR', {
         timeZone: 'Europe/Paris',
-        hour12: false
-    });
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').reverse().join('-');
 
+    console.log("created_at", created_at)
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-            db.query(sqlAddAccount, [username, lastname, hash, role, created_at, birthday, phone_number, email], (err, results, fields) => {
+            db.query(sqlAddAccount, [email, hash, lastname, username, phone_number, birthday, created_at, role], (err, results, fields) => {
                 if(!err){
                     res.status(200).json({results})
                 }else{

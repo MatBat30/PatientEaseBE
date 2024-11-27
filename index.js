@@ -30,10 +30,7 @@ const swaggerDocument = JSON.parse(
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // --- PATH ---
-app.get('/', (req, res) => {
-    res.json({ message: 'Hello world !' })
-})
-
+app.get('/', (req, res) => { res.json({ message: 'Hello world !' })})
 app.use('/auth', auth)
 
 // --- START SERVER ---
