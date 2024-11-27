@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema patientEase
+-- Schema queuebuddy
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema patientEase
+-- Schema queuebuddy
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `patientEase` DEFAULT CHARACTER SET utf8 ;
-USE `patientEase` ;
+CREATE SCHEMA IF NOT EXISTS `queuebuddy` DEFAULT CHARACTER SET utf8 ;
+USE `queuebuddy` ;
 
 -- -----------------------------------------------------
--- Table `patientEase`.`account`
+-- Table `patiqueuebuddyentEase`.`account`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `patientEase`.`account` (
+CREATE TABLE IF NOT EXISTS `queuebuddy`.`account` (
   `account_id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NULL,
   `lastname` VARCHAR(45) NULL,
