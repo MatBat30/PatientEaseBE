@@ -1,4 +1,4 @@
-# PatientEaseBE
+# queuebuddy
 
 
 ## Conteneur MariaDB
