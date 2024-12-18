@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 dotenv.config()
 const bcrypt = require('bcrypt');
+const commonEnum = require('../enum')
+
 const { body, validationResult } = require('express-validator');
 
 exports.validateSignup = [
@@ -15,7 +17,6 @@ exports.validateSignup = [
             }
             return true;
         }),
-
     body('password')
         .isLength({ min: 8 }).withMessage('Mot de passe trop court')
         .matches(/\d/).withMessage('Le mot de passe doit contenir au moins un chiffre'),
@@ -77,7 +78,11 @@ exports.verifyUserExist = (req, res, next) => {
     db.query('SELECT * FROM staff WHERE mail = ?', [email],
         (err, result) => {
             if (!err) {
+                const id = result[0].id_staff
+                const role = result[0].role
                 if (result != "") {
+                    req.id = id
+                    req.role = role
                     next()
                 } else {
                     res.status(401).json({ message: "Email / Mot de passe incorrect." })
@@ -102,4 +107,36 @@ exports.verifyPassword = (req, res, next) => {
                 }
             });
         });
+}
+
+exports.verifyUserConnect = (req, res, next) => {
+    try {
+        const token = req.headers.cookie.split("userToken=")[1].split(";")[0]
+        const id = jwt.verify(token, process.env.JWT_SECRET_KEY).id
+        const role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
+        req.id = id
+        req.role = role
+        const newToken = jwt.sign({ 'iss': 'JWT course', "id": id, "role": role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+        res.cookie('userToken', newToken)
+
+        next()
+    } catch (error) {
+        res.status(401).json("non connecté")
+    }
+}
+
+exports.verifyUserRole = (req, res, next) => {
+    let role = null
+    if (req.role) {
+        role = req.role
+    }else{
+        const token = req.headers.cookie.split("userToken=")[1].split(";")[0]
+        role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
+    }
+
+    if (role == commonEnum.StaffRole.ADMINISTRATEUR) {
+        next()
+    } else {
+        res.status(400).json("Admin role is required")
+    }
 }

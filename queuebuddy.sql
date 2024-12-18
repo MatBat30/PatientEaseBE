@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `numero_telephone` VARCHAR(13) NULL,
   `date_naissance` DATE NULL,
   `date_creation` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `role` VARCHAR(20) NULL,
+  `role` ENUM('administrateur', 'medecin', 'secretaire') NULL,
   PRIMARY KEY (`id_staff`)
 ) ENGINE = InnoDB;
 
