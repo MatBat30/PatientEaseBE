@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
 
+// WARNING Implémenter le check access control
+
 // --- ROUTE ---
 router.get('/:id',
     userController.getUserById
