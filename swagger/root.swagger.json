@@ -1,0 +1,16 @@
+{
+    "paths": {
+      "/": {
+        "get": {
+          "summary": "Based entry point",
+          "description": "Return Hello world !",
+          "responses": {
+            "200": {
+              "description": "Succès"
+            }
+          }
+        }
+      }
+    }
+  }
+  

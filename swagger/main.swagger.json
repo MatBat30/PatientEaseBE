@@ -1,0 +1,15 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API Node.js",
+      "version": "1.0.0",
+      "description": "Documentation API avec Swagger"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ],
+    "paths": {}
+  }
+  
