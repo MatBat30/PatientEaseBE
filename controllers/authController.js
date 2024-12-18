@@ -39,3 +39,13 @@ exports.signup = async (req, res) => {
         });
     });
 }
+
+exports.signout = (req, res) => {
+    res.clearCookie('userToken');
+    res.cookie('userToken', '', {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true,
+        sameSite: 'strict'
+    }).status(200).json({ message: 'You are disconnected' });
+}

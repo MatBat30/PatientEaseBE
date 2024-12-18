@@ -9,24 +9,24 @@ const { body, validationResult } = require('express-validator');
 
 exports.validateSignup = [
     body('email')
-        .isEmail().withMessage('Email invalide')
+        .isEmail().withMessage('Invalid email')
         .custom(async (value) => {
             const [rows] = await db.promise().query('SELECT * FROM staff WHERE mail = ?', [value]);
             if (rows.length > 0) {
-                throw new Error('L\'email est déjà utilisé');
+                throw new Error('Email is already in use');
             }
             return true;
         }),
     body('password')
-        .isLength({ min: 8 }).withMessage('Mot de passe trop court')
-        .matches(/\d/).withMessage('Le mot de passe doit contenir au moins un chiffre'),
+        .isLength({ min: 8 }).withMessage('Password is too short')
+        .matches(/\d/).withMessage('Password must contain at least one number'),
 
     body('username')
-        .notEmpty().withMessage('Nom d\'utilisateur requis'),
+        .notEmpty().withMessage('Username is required'),
 
     body('birthday')
-        .notEmpty().withMessage('La date de naissance est requise')
-        .isDate().withMessage('La date de naissance n\'est pas valide')
+        .notEmpty().withMessage('Birthday is required')
+        .isDate().withMessage('Birthday is not valid')
         .custom((value) => {
             const birthDate = new Date(value);
             const age = new Date().getFullYear() - birthDate.getFullYear();
@@ -35,14 +35,14 @@ exports.validateSignup = [
                 age--;
             }
             if (age < 18) {
-                throw new Error('Vous devez avoir au moins 18 ans pour vous inscrire');
+                throw new Error('You must be at least 18 years old to sign up');
             }
             return true;
         }),
 
     body('phone_number')
-        .notEmpty().withMessage('Le numéro de téléphone est requis')
-        .matches(/^0[1-9]{1}[0-9]{8}$/).withMessage('Le numéro de téléphone n\'est pas valide'),
+        .notEmpty().withMessage('Phone number is required')
+        .matches(/^0[1-9]{1}[0-9]{8}$/).withMessage('Phone number is not valid'),
 
     (req, res, next) => {
         const errors = validationResult(req);
@@ -85,7 +85,7 @@ exports.verifyUserExist = (req, res, next) => {
                     req.role = role
                     next()
                 } else {
-                    res.status(401).json({ message: "Email / Mot de passe incorrect." })
+                    res.status(401).json({ message: "Email / Mot de passe invalid" })
                 }
             } else {
                 console.log(err)
@@ -121,7 +121,7 @@ exports.verifyUserConnect = (req, res, next) => {
 
         next()
     } catch (error) {
-        res.status(401).json("non connecté")
+        res.status(401).json("Not connected")
     }
 }
 

@@ -14,4 +14,8 @@ router.post('/signup',
     authMiddleware.validateSignup,
     authController.signup)
 
+router.get("/signout",
+    authController.signout)
+
+        
 module.exports = router
