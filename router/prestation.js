@@ -7,19 +7,19 @@ const prestationMiddleware = require('../middleware/prestationMiddleware')
 // --- ROUTE ---
 router.get('/:id',
     authMiddleware.verifyUserConnect,
-    authMiddleware.verifyUserRole,
+    authMiddleware.isAdmin,
     prestationController.getPrestationById
 )
 
 router.get('/',
     authMiddleware.verifyUserConnect,
-    authMiddleware.verifyUserRole,
+    authMiddleware.isAdmin,
     prestationController.getPrestation
 )
 
 router.post('/',
     authMiddleware.verifyUserConnect,
-    authMiddleware.verifyUserRole,
+    authMiddleware.isAdmin,
     prestationController.postPrestation
 )
 

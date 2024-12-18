@@ -1,29 +1,24 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../controllers/userController')
+const ticketController = require('../controllers/ticketController')
 const authMiddleware = require('../middleware/authMiddleware')
+const ticketMiddleware = require('../middleware/ticketMiddleware')
 
 // --- ROUTE ---
 router.get('/:id',
     authMiddleware.verifyUserConnect,
-    authMiddleware.isAdmin,
-    userController.getUserById
+    ticketController.getTicketById
 )
 
 router.get('/',
     authMiddleware.verifyUserConnect,
-    authMiddleware.isAdmin,
-    userController.getUsers
+    ticketController.getTicket
 )
 
 router.post('/',
     authMiddleware.verifyUserConnect,
-    userController.postUser
-)
-
-router.put('/',
-    authMiddleware.verifyUserConnect,
-    userController.putUserById
+    ticketMiddleware.validateTicket,
+    ticketController.postPrestation
 )
 
 module.exports = router

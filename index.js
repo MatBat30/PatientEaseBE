@@ -12,6 +12,7 @@ const swaggerDocument = require('./swagger/conbineSwagger');
 const auth = require('./router/auth')
 const user = require('./router/user')
 const prestation = require('./router/prestation')
+const ticket = require('./router/ticket')
 
 const app = express()
 app.use(express.json())
@@ -28,6 +29,7 @@ app.get('/', (req, res) => { res.json({ message: 'Hello world !' })})
 app.use('/auth', auth)
 app.use('/user', user)
 app.use('/prestation', prestation)
+app.use('/ticket', ticket)
 
 // --- START SERVER ---
 app.listen(port, () => {

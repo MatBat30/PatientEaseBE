@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 const { body, validationResult } = require('express-validator');
 
-const validatePrestation = [
+exports.validatePrestation = [
     body('nom_prestation')
         .notEmpty().withMessage('Le nom de la prestation est requis')
         .isLength({ max: 50 }).withMessage('Le nom de la prestation ne doit pas dépasser 50 caractères'),
@@ -21,5 +21,3 @@ const validatePrestation = [
         next();
     }
 ];
-
-module.exports = validatePrestation;
