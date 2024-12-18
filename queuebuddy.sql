@@ -12,6 +12,15 @@ CREATE SCHEMA IF NOT EXISTS `queuebuddy` DEFAULT CHARACTER SET utf8 ;
 USE `queuebuddy` ;
 
 -- -----------------------------------------------------
+-- Définir le fuseau horaire global
+-- -----------------------------------------------------
+SET GLOBAL time_zone = 'Europe/Paris';
+SET time_zone = 'Europe/Paris';
+
+SELECT @@global.time_zone, @@session.time_zone;
+
+
+-- -----------------------------------------------------
 -- Table `staff`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `staff` (

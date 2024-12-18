@@ -125,7 +125,7 @@ exports.verifyUserConnect = (req, res, next) => {
     }
 }
 
-exports.verifyUserRole = (req, res, next) => {
+exports.isAdmin = (req, res, next) => {
     let role = null
     if (req.role) {
         role = req.role
@@ -134,9 +134,41 @@ exports.verifyUserRole = (req, res, next) => {
         role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
     }
 
-    if (role == commonEnum.StaffRole.ADMINISTRATEUR) {
+    if (role == commonEnum.EnumStaffRole.ADMINISTRATEUR) {
         next()
     } else {
         res.status(400).json("Admin role is required")
+    }
+}
+
+exports.isMedecin = (req, res, next) => {
+    let role = null
+    if (req.role) {
+        role = req.role
+    }else{
+        const token = req.headers.cookie.split("userToken=")[1].split(";")[0]
+        role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
+    }
+
+    if (role == commonEnum.EnumStaffRole.MEDECIN) {
+        next()
+    } else {
+        res.status(400).json("Medecin role is required")
+    }
+}
+
+exports.isSecretaire = (req, res, next) => {
+    let role = null
+    if (req.role) {
+        role = req.role
+    }else{
+        const token = req.headers.cookie.split("userToken=")[1].split(";")[0]
+        role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
+    }
+
+    if (role == commonEnum.EnumStaffRole.SECRETAIRE) {
+        next()
+    } else {
+        res.status(400).json("Secretaire role is required")
     }
 }

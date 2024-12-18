@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const commonEnum = require('../enum')
 
 // --- REQUETES ---
-const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance, date_creation, role) VALUES (?,?,?,?,?,?,?,?);`
+const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance, role) VALUES (?,?,?,?,?,?,?);`
 
 // --- FONCTION ---
 exports.signin = (req, res) => {
@@ -21,25 +21,14 @@ exports.signup = async (req, res) => {
 
     const username = temp_username.charAt(0).toUpperCase() + temp_username.slice(1).toLowerCase();
     const lastname = req.body.lastname.toUpperCase();
-
     const birthday = req.body.birthday
     const phone_number = req.body.phone_number
     const email = req.body.email
-
-    // const role = 1 // 1 => administrateur; 2 => medecin; 3 => secretaire
-    const role = commonEnum.StaffRole.ADMINISTRATEUR
+    const role = commonEnum.EnumStaffRole.ADMINISTRATEUR
     
-    const created_at = new Date().toLocaleDateString('fr-FR', {
-        timeZone: 'Europe/Paris',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).split('/').reverse().join('-');
-
-    console.log("created_at", created_at)
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-            db.query(sqlAddAccount, [email, hash, lastname, username, phone_number, birthday, created_at, role], (err, results, fields) => {
+            db.query(sqlAddAccount, [email, hash, lastname, username, phone_number, birthday, role], (err, results, fields) => {
                 if(!err){
                     res.status(200).json({results})
                 }else{

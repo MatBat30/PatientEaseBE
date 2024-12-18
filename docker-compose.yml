@@ -27,16 +27,16 @@ services:
 
   mariadb:
     image: mariadb:latest
-    build:
-      context: .
-      dockerfile: Dockerfile.mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER_API}
       MYSQL_PASSWORD: ${DB_PASSWORD_API}
+      TZ: Europe/Paris
     volumes:
       - mariadb_data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ./queuebuddy.sql:/docker-entrypoint-initdb.d/queuebuddy.sql
     ports:
       - "3306:3306"
