@@ -1,29 +1,27 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../controllers/userController')
+const prestationController = require('../controllers/prestationController')
 const authMiddleware = require('../middleware/authMiddleware')
+const prestationMiddleware = require('../middleware/prestationMiddleware')
 
 // --- ROUTE ---
 router.get('/:id',
     authMiddleware.verifyUserConnect,
     authMiddleware.isAdmin,
-    userController.getUserById
+    prestationController.getPrestationById
 )
 
 router.get('/',
     authMiddleware.verifyUserConnect,
     authMiddleware.isAdmin,
-    userController.getUsers
+    prestationController.getPrestation
 )
 
 router.post('/',
     authMiddleware.verifyUserConnect,
-    userController.postUser
-)
-
-router.put('/',
-    authMiddleware.verifyUserConnect,
-    userController.putUserById
+    authMiddleware.isAdmin,
+    prestationController.postPrestation
 )
 
 module.exports = router
+

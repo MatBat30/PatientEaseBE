@@ -6,11 +6,13 @@ dotenv.config();
 const port = process.env.PORT
 
 const swaggerUi = require("swagger-ui-express");
-const fs = require("fs"); // Pour lire le fichier swagger.json
-const path = require("path"); // Pour résoudre le chemin du fichier
+const swaggerDocument = require('./swagger/conbineSwagger');
 
 // --- ROUTER ---
 const auth = require('./router/auth')
+const user = require('./router/user')
+const prestation = require('./router/prestation')
+const ticket = require('./router/ticket')
 
 const app = express()
 app.use(express.json())
@@ -21,17 +23,13 @@ app.use(cors({
     credentials: true
 }));
 
-// Charger le fichier swagger.json
-const swaggerDocument = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "swagger.json"), "utf8")
-);
-
-// Route Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // --- PATH ---
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => { res.json({ message: 'Hello world !' })})
 app.use('/auth', auth)
+app.use('/user', user)
+app.use('/prestation', prestation)
+app.use('/ticket', ticket)
 
 // --- START SERVER ---
 app.listen(port, () => {
