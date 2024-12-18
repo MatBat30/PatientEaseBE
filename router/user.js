@@ -1,28 +1,22 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
-const authMiddleware = require('../middleware/authMiddleware')
 
-
-// --- route react ---
+// --- ROUTE ---
 router.get('/:id',
-    authMiddleware.verifyUserConnect,
-    userController.getInfosUser
+    userController.getUserById
 )
 
 router.get('/',
-    authMiddleware.verifyUserConnect,
-    userController.getCurrentInfosUser
+    userController.getUsers
 )
 
-router.put('/:id',
-    authMiddleware.verifyUserConnect,
-    userController.updateAnInfosUser
+router.post('/',
+    userController.postUser
 )
 
 router.put('/',
-    authMiddleware.verifyUserConnect,
-    userController.updateCurrentInfosUser
+    userController.putUserById
 )
 
 module.exports = router

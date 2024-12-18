@@ -3,6 +3,7 @@ const router = express.Router()
 const authController = require('../controllers/authController')
 const authMiddleware = require('../middleware/authMiddleware')
 
+// --- ROUTE ---
 router.post('/signin',
     authMiddleware.verifyCredentialsExist,
     authMiddleware.verifyUserExist,
