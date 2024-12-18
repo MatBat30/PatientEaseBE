@@ -3,16 +3,16 @@ const db = require('../database/connection')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
-
+const commonEnum = require('../enum')
 
 // --- REQUETES ---
 const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance, date_creation, role) VALUES (?,?,?,?,?,?,?,?);`
 
-
 // --- FONCTION ---
 exports.signin = (req, res) => {
-    console.log("signin")
-    const token = jwt.sign({ 'iss': 'JWT course', "email": req.body.email }, "salt", { expiresIn: '1h' })
+    console.log("id ", req.id)
+    console.log("role", req.role)
+    const token = jwt.sign({ 'iss': 'JWT course', "id": req.id, "role": req.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
     res.cookie('userToken', token).status(200).json({ message: 'You are connected' })
 }
 
@@ -25,7 +25,10 @@ exports.signup = async (req, res) => {
     const birthday = req.body.birthday
     const phone_number = req.body.phone_number
     const email = req.body.email
-    const role = 1
+
+    // const role = 1 // 1 => administrateur; 2 => medecin; 3 => secretaire
+    const role = commonEnum.StaffRole.ADMINISTRATEUR
+    
     const created_at = new Date().toLocaleDateString('fr-FR', {
         timeZone: 'Europe/Paris',
         year: 'numeric',
