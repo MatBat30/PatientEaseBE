@@ -11,7 +11,7 @@ exports.validateSignup = [
     body('mail')
         .isEmail().withMessage('Invalid email')
         .custom(async (value) => {
-            const [rows] = await db.promise().query('SELECT * FROM staff WHERE mail = ?', [value]);
+            const [rows] = await db.promise().query('SELECT * FROM personnel WHERE mail = ?', [value]);
             if (rows.length > 0) {
                 throw new Error('Email is already in use');
             }
@@ -78,20 +78,25 @@ exports.verifyCredentialsExist = (req, res, next) => {
 
 exports.verifyUserExist = (req, res, next) => {
     const email = req.body.email ?? req.body[0].email
-    db.query('SELECT * FROM staff WHERE mail = ?', [email],
+    db.query('SELECT * FROM personnel WHERE mail = ?', [email],
         (err, result) => {
             if (!err) {
-                const id = result[0].id_staff
-                const role = result[0].role
-                if (result != "") {
-                    req.id = id
-                    req.role = role
-                    next()
-                } else {
-                    res.status(401).json({ message: "Email / Mot de passe invalid" })
-                }
+                if (result.length > 0) {
+                    const id = result[0].id_personnel
+                    const role = result[0].role
+                    if (result != "") {
+                        req.id = id
+                        req.role = role
+                        next()
+                    } else {
+                        res.status(401).json({ message: "Email / Mot de passe invalid" })
+                    }
+                } else
+                {
+                    res.status(401).json({ message: "Utilisateur introuvable" })
+                }                
             } else {
-                console.log(err)
+                return res.status(500).json({ message: "Erreur serveur" });
             }
         }
     );
@@ -100,16 +105,27 @@ exports.verifyUserExist = (req, res, next) => {
 exports.verifyPassword = (req, res, next) => {
     const email = req.body.email ?? req.body[0].email
     const password = req.body.password ?? req.body[0].password
-    db.query('SELECT * FROM staff WHERE mail = ?', [email],
+    db.query('SELECT * FROM personnel WHERE mail = ?', [email],
         (err, result) => {
-            bcrypt.compare(password, result[0].password, (err, result_bcrypt) => {
-                if (result_bcrypt) {
-                    next()
-                } else {
-                    res.status(401).json({ message: "Invalid credentials" })
+            if (!err) {
+                if (result.length > 0) {
+                    bcrypt.compare(password, result[0].password, (err, result_bcrypt) => {
+                        if (result_bcrypt) {
+                            next()
+                        } else {
+                            res.status(401).json({ message: "Invalid credentials" })
+                        }
+                    });
                 }
-            });
-        });
+                else
+                {
+                    return res.status(404).json({ message: "Utilisateur introuvable" });
+                }
+            } else {
+                return res.status(500).json({ message: "Erreur interne du serveur" });
+            }
+        }
+    );
 }
 
 exports.verifyUserConnect = (req, res, next) => {
@@ -137,7 +153,7 @@ exports.isAdmin = (req, res, next) => {
         role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
     }
 
-    if (role == commonEnum.EnumStaffRole.ADMINISTRATEUR) {
+    if (role == commonEnum.EnumPersonnelRole.ADMINISTRATEUR) {
         next()
     } else {
         res.status(400).json("Admin role is required")
@@ -153,7 +169,7 @@ exports.isMedecin = (req, res, next) => {
         role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
     }
 
-    if (role == commonEnum.EnumStaffRole.MEDECIN) {
+    if (role == commonEnum.EnumPersonnelRole.MEDECIN) {
         next()
     } else {
         res.status(400).json("Medecin role is required")
@@ -169,7 +185,7 @@ exports.isSecretaire = (req, res, next) => {
         role = jwt.verify(token, process.env.JWT_SECRET_KEY).role
     }
 
-    if (role == commonEnum.EnumStaffRole.SECRETAIRE) {
+    if (role == commonEnum.EnumPersonnelRole.SECRETAIRE) {
         next()
     } else {
         res.status(400).json("Secretaire role is required")

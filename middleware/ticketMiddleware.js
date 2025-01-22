@@ -8,29 +8,18 @@ const { body, validationResult } = require('express-validator');
 
 exports.validateTicket = [
     body('statut')
-        .optional()
-        .isIn(Object.values(enumTicket.EnumTicket)).withMessage('Invalid status'),
+        .isIn(['enAttente', 'enCours', 'termine', 'enPause', 'annule']).withMessage('Le statut doit être l\'un des suivants : enAttente, enCours, termine, enPause, annule'),
 
     body('date_cloture')
-        .optional()
-        .isISO8601().withMessage('The closure date must be in ISO8601 format')
-        .custom((value) => {
-            const dateCloture = new Date(value);
-            const now = new Date();
-
-            if (dateCloture <= now) {
-                throw new Error('The closure date must be strictly later than the current time');
-            }
-            return true;
-        }),
+        .isISO8601().withMessage('La date de clôture doit être une date valide (format: YYYY-MM-DD HH:MM)')
+        .isBefore(new Date().toISOString()).withMessage('La date de clôture ne peut pas être dans le futur'),
 
     body('delai')
-        .optional()
-        .matches(/^([01]?[0-9]|2[0-3]):([0-5]?[0-9]):([0-5]?[0-9])$/).withMessage('The delay must be in HH:MM:SS format'),
+        .matches(/^([0-1]?[0-9]|2[0-3]):([0-5]?[0-9]):([0-5]?[0-9])$/).withMessage('Le délai doit être au format HH:MM:SS'),
 
     body('id_prestation')
-        .notEmpty().withMessage('The prestation ID is required')
-        .isInt({ min: 1 }).withMessage('The prestation ID must be a positive integer'),
+        .isInt().withMessage('L\'ID de prestation doit être un entier')
+        .toInt(),
 
     (req, res, next) => {
         const errors = validationResult(req);

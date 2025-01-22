@@ -4,7 +4,7 @@ const EnumMethodeCreation = {
     PHONE: "téléphone"
 };
 
-const EnumStaffRole = {
+const EnumPersonnelRole = {
     ADMINISTRATEUR: "administrateur",
     MEDECIN: "medecin",
     SECRETAIRE: "secretaire"
@@ -20,6 +20,6 @@ const EnumTicket = {
 
 module.exports = {
     EnumMethodeCreation,
-    EnumStaffRole,
+    EnumPersonnelRole,
     EnumTicket,
 };

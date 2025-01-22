@@ -6,7 +6,7 @@ dotenv.config()
 // --- REQUETES ---
 const sqlGetPrestationById = `SELECT * FROM prestation WHERE id_prestation = ?`
 const sqlGetPrestation = `SELECT * FROM prestation`
-const sqlPostPrestation = `INSERT INTO prestation (nom_prestation, temps_approximatif, id_staff) VALUES (?, ?, ?);`
+const sqlPostPrestation = `INSERT INTO prestation (nom_prestation, temps_approximatif, id_personnel) VALUES (?, ?, ?);`
 
 exports.getPrestationById = (req, res) => {
     const id_prestation = req.params.id;

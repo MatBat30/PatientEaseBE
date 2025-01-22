@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const commonEnum = require('../enum')
 
 // --- REQUETES ---
-const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance) VALUES (?,?,?,?,?,?);`
+const sqlAddAccount = `INSERT INTO personnel (mail, password, nom, prenom, numero_telephone, date_naissance, role, id_etablissement) VALUES (?,?,?,?,?,?,?,?);`
 
 // --- FONCTION ---
 exports.signin = (req, res) => {
@@ -26,12 +26,21 @@ exports.signup = async (req, res) => {
     let numero_telephone = req.body.numero_telephone
     let date_naissance = req.body.date_naissance
     const mail = req.body.mail
-    const role = commonEnum.EnumStaffRole.MEDECIN
+    const id_etablissement = req.body.id_etablissement
+
+    let role = req.body.role
+    if ((role != commonEnum.EnumPersonnelRole.ADMINISTRATEUR) && 
+        (role != commonEnum.EnumPersonnelRole.MEDECIN) && 
+        (role != commonEnum.EnumPersonnelRole.SECRETAIRE))
+    {
+        // WARNING : Peut-être pas mettre directelement le rôle MEDECIN
+        role = commonEnum.EnumPersonnelRole.MEDECIN
+    }
     
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
             console.log(salt)
-            db.query(sqlAddAccount, [mail, hash, nom, prenom, numero_telephone, date_naissance, role], (err, results, fields) => {
+            db.query(sqlAddAccount, [mail, hash, nom, prenom, numero_telephone, date_naissance, role, id_etablissement], (err, results, fields) => {
                 if(!err){
                     res.status(200).json({results})
                 }else{

@@ -12,7 +12,12 @@ const sqlUpdateAccount = `UPDATE utilisateur SET numero_telephone = ?, nom = ?, 
 
 // --- FONCTION ---
 exports.getUserById = (req, res) => {
-
+    db.query(sqlGetAccountById, [req.params.id], (err, results) => {
+        if (err) {
+            res.status(500).json({ "message": "Internal Server Error" });
+        }
+        res.status(200).json(results);
+    });
 }
 
 exports.getUsers = (req, res) => {
