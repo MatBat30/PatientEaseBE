@@ -47,5 +47,19 @@ exports.postUser = (req, res) => {
 }
 
 exports.putUserById = (req, res) => {
+    const id_utilisateur = req.body.id_utilisateur
+    const numero_telephone = req.body.numero_telephone;
+    const nom = req.body.nom
+    const prenom = req.body.prenom
+    const date_naissance = req.body.date_naissance
+    const methode_creation = req.body.methode_creation
+    const id_ticket = req.body.id_ticket
 
+    db.query(sqlUpdateAccount, [numero_telephone, nom, prenom, date_naissance, methode_creation, id_ticket, id_utilisateur], (err, results) => {
+        if (err) {
+            console.log(err)
+            res.status(500).json({ "message": "Internal Server Error" });
+        }
+        res.status(200).json(results);
+    });
 }

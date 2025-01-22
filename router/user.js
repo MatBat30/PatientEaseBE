@@ -26,6 +26,8 @@ router.post('/',
 
 router.put('/',
     authMiddleware.verifyUserConnect,
+    userMiddleware.verifyUserExist,
+    userMiddleware.validateUser,
     userController.putUserById
 )
 

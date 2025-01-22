@@ -6,6 +6,9 @@ dotenv.config()
 
 const { body, validationResult } = require('express-validator');
 
+// --- REQUETES ---
+const sqlGetAccountById = `SELECT * FROM utilisateur WHERE id_utilisateur = ?;`
+
 exports.verifyIntParamsId = (req, res, next) => {
     try {
         const id = req.params.id;
@@ -63,3 +66,24 @@ exports.validateUser = [
     next();
   }
 ]
+
+exports.verifyUserExist = (req, res, next) => {
+  const idUtilisateur = req.body.id_utilisateur;
+    
+    if (!Number.isInteger(Number(idUtilisateur))) {
+        return res.status(400).json({ message: "L'ID utilisateur doit être un nombre entier" });
+    }
+
+  db.query('SELECT * FROM utilisateur WHERE id_utilisateur = ?', [idUtilisateur], (err, result) => {
+    if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Erreur serveur" });
+    }
+
+    if (result.length === 0) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    next();
+});
+}
