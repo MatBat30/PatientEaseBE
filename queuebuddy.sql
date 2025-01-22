@@ -101,3 +101,38 @@ FLUSH PRIVILEGES;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -- Insertion de données dans la table `staff`
+-- INSERT INTO `staff` (`mail`, `password`, `nom`, `prenom`, `numero_telephone`, `date_naissance`, `role`)
+-- VALUES
+-- ('admin@queuebuddy.com', 'admin123', 'Admin', 'Principal', '0102030405', '1980-01-01', 'administrateur'),
+-- ('dr.smith@queuebuddy.com', 'pass1234', 'Smith', 'John', '0607080910', '1975-05-20', 'medecin'),
+-- ('secretary@queuebuddy.com', 'secpass', 'Doe', 'Jane', '0506070809', '1990-11-15', 'secretaire');
+
+-- -- Insertion de données dans la table `prestation`
+-- INSERT INTO `prestation` (`nom_prestation`, `temps_approximatif`, `id_staff`)
+-- VALUES
+-- ('Consultation Générale', '00:30:00', 2),
+-- ('Examen Radiologique', '01:00:00', 2),
+-- ('Suivi Administratif', '00:15:00', 3);
+
+-- -- Insertion de données dans la table `ticket`
+-- INSERT INTO `ticket` (`statut`, `delai`, `id_prestation`)
+-- VALUES
+-- ('enAttente', '00:10:00', 1),
+-- ('enCours', '00:05:00', 2),
+-- ('termine', '00:00:00', 3);
+
+-- -- Insertion de données dans la table `utilisateur`
+-- INSERT INTO `utilisateur` (`numero_telephone`, `nom`, `prenom`, `date_naissance`, `methode_creation`, `id_ticket`)
+-- VALUES
+-- ('0612345678', 'Dupont', 'Alice', '1995-03-10', 'borne', 1),
+-- ('0623456789', 'Martin', 'Bob', '1988-07-22', 'téléphone', 2),
+-- ('0634567890', 'Durand', 'Charlie', '2000-12-05', 'qrCode', 3);
+
+-- -- Insertion de données dans la table `feedback`
+-- INSERT INTO `feedback` (`commentaire`, `id_ticket`)
+-- VALUES
+-- ('Service rapide et efficace.', 1),
+-- ('Un peu d’attente, mais globalement satisfait.', 2),
+-- ('Excellent accueil et suivi.', 3);

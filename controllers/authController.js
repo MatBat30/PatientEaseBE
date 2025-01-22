@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const commonEnum = require('../enum')
 
 // --- REQUETES ---
-const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance, role) VALUES (?,?,?,?,?,?,?);`
+const sqlAddAccount = `INSERT INTO staff (mail, password, nom, prenom, numero_telephone, date_naissance) VALUES (?,?,?,?,?,?);`
 
 // --- FONCTION ---
 exports.signin = (req, res) => {
@@ -17,18 +17,21 @@ exports.signin = (req, res) => {
 }
 
 exports.signup = async (req, res) => {
-    const temp_username = req.body.username;
+    console.log(req.body)
+    let temp_username = req.body.prenom;
 
-    const username = temp_username.charAt(0).toUpperCase() + temp_username.slice(1).toLowerCase();
-    const lastname = req.body.lastname.toUpperCase();
-    const birthday = req.body.birthday
-    const phone_number = req.body.phone_number
-    const email = req.body.email
-    const role = commonEnum.EnumStaffRole.ADMINISTRATEUR
+    let nom = req.body.nom
+    nom = nom.toUpperCase()
+    let prenom = temp_username.charAt(0).toUpperCase() + temp_username.slice(1).toLowerCase();
+    let numero_telephone = req.body.numero_telephone
+    let date_naissance = req.body.date_naissance
+    const mail = req.body.mail
+    const role = commonEnum.EnumStaffRole.MEDECIN
     
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-            db.query(sqlAddAccount, [email, hash, lastname, username, phone_number, birthday, role], (err, results, fields) => {
+            console.log(salt)
+            db.query(sqlAddAccount, [mail, hash, nom, prenom, numero_telephone, date_naissance, role], (err, results, fields) => {
                 if(!err){
                     res.status(200).json({results})
                 }else{

@@ -8,7 +8,7 @@ const commonEnum = require('../enum')
 const { body, validationResult } = require('express-validator');
 
 exports.validateSignup = [
-    body('email')
+    body('mail')
         .isEmail().withMessage('Invalid email')
         .custom(async (value) => {
             const [rows] = await db.promise().query('SELECT * FROM staff WHERE mail = ?', [value]);
@@ -21,10 +21,13 @@ exports.validateSignup = [
         .isLength({ min: 8 }).withMessage('Password is too short')
         .matches(/\d/).withMessage('Password must contain at least one number'),
 
-    body('username')
-        .notEmpty().withMessage('Username is required'),
+    body('nom')
+        .notEmpty().withMessage('Lastname is required'),
 
-    body('birthday')
+    body('prenom')
+        .notEmpty().withMessage('Firstname is required'),
+
+    body('date_naissance')
         .notEmpty().withMessage('Birthday is required')
         .isDate().withMessage('Birthday is not valid')
         .custom((value) => {
@@ -40,7 +43,7 @@ exports.validateSignup = [
             return true;
         }),
 
-    body('phone_number')
+    body('numero_telephone')
         .notEmpty().withMessage('Phone number is required')
         .matches(/^0[1-9]{1}[0-9]{8}$/).withMessage('Phone number is not valid'),
 

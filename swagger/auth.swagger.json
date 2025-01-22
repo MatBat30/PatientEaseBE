@@ -209,6 +209,62 @@
                     }
                 }
             }
+        },
+        "/auth/signout": {
+            "get": {
+                "summary": "Déconnexion d'un utilisateur",
+                "description": "Permet à un utilisateur de se déconnecter. Cette route supprime la session active de l'utilisateur.",
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur déconnecté avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You are disconnected"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de déconnexion (par exemple, l'utilisateur n'est pas connecté)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur lors de la déconnexion"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Une erreur est survenue lors de la déconnexion"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
