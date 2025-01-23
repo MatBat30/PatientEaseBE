@@ -12,7 +12,6 @@ services:
       - /home/node/app/node_modules
       # WARNING a utiliser en production, Cree un dossier a la racine du projet pour le mapper dans docker
       # - .node_modules:/app/node_modules
-
     depends_on:
       - mariadb
     environment:
@@ -23,7 +22,9 @@ services:
       PORT: ${PORT}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
-    command: nodemon --legacy-watch index.js
+    # command: nodemon --legacy-watch index.js
+    command: /bin/sh -c "sleep 5 && nodemon --legacy-watch index.js"
+
 
   mariadb:
     image: mariadb:latest
@@ -37,7 +38,7 @@ services:
       - mariadb_data:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ./queuebuddy.sql:/docker-entrypoint-initdb.d/queuebuddy.sql
+      # - ./queuebuddy.sql:/docker-entrypoint-initdb.d/queuebuddy.sql
     ports:
       - "3306:3306"
 

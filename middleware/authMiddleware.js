@@ -5,6 +5,9 @@ dotenv.config()
 const bcrypt = require('bcrypt');
 const commonEnum = require('../enum')
 
+const AppDataSource = require("../data-source");
+const { Personnel } = require("../entities/Personnel");
+
 const { body, validationResult } = require('express-validator');
 
 exports.validateSignup = [
@@ -56,8 +59,7 @@ exports.validateSignup = [
     }
 ];
 
-exports.verifyCredentialsExist = (req, res, next) => {
-    
+exports.verifyCredentialsExist = async (req, res, next) => {
     let count = 0
     if (Array.isArray(req.body)) {
         count = req.body.length - 1
@@ -76,30 +78,24 @@ exports.verifyCredentialsExist = (req, res, next) => {
     }
 }
 
-exports.verifyUserExist = (req, res, next) => {
+exports.verifyUserExist = async (req, res, next) => {
     const email = req.body.email ?? req.body[0].email
-    db.query('SELECT * FROM personnel WHERE mail = ?', [email],
-        (err, result) => {
-            if (!err) {
-                if (result.length > 0) {
-                    const id = result[0].id_personnel
-                    const role = result[0].role
-                    if (result != "") {
-                        req.id = id
-                        req.role = role
-                        next()
-                    } else {
-                        res.status(401).json({ message: "Email / Mot de passe invalid" })
-                    }
-                } else
-                {
-                    res.status(401).json({ message: "Utilisateur introuvable" })
-                }                
-            } else {
-                return res.status(500).json({ message: "Erreur serveur" });
-            }
-        }
-    );
+
+    const personnelRepository = AppDataSource.getRepository("Personnel");
+
+    const personnel = await personnelRepository.findOneBy({
+        mail: email,
+    }) // find by firstName and lastName
+
+    console.log(personnel)
+
+    if (personnel) {
+        req.id = personnel.id_personnel
+        req.role = personnel.role
+        next()
+    } else {
+        res.status(401).json({ message: "Utilisateur introuvable" })
+    }
 }
 
 exports.verifyPassword = (req, res, next) => {
