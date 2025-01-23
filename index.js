@@ -17,8 +17,9 @@ const swaggerDocument = require('./swagger/conbineSwagger');
 // --- ROUTER ---
 const auth = require('./router/auth')
 const user = require('./router/user')
-const prestation = require('./router/prestation')
 const ticket = require('./router/ticket')
+const prestation = require('./router/prestation')
+const etablissement = require('./router/etablissement')
 
 // --- ---
 const app = express()
@@ -40,8 +41,10 @@ AppDataSource.initialize()
     app.get('/', (req, res) => { res.json({ message: 'Hello world !'})})
     app.use('/auth', auth)
     app.use('/user', user)
-    app.use('/prestation', prestation)
     app.use('/ticket', ticket)
+    app.use('/prestation', prestation)
+    app.use('/etablissement', etablissement)
+    
 
     // // --- FAKER JS ---
     // // WARNING, à supprimer en prod

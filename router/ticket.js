@@ -17,8 +17,8 @@ router.get('/',
 
 router.post('/',
     authMiddleware.verifyUserConnect,
-    ticketMiddleware.validateTicket,
-    ticketController.postPrestation
+    // ticketMiddleware.validateTicket,
+    ticketController.postTicket
 )
 
 module.exports = router

@@ -11,7 +11,7 @@ const { Personnel } = require("../entities/Personnel");
 // --- REQUETES ---
 const sqlAddAccount = `INSERT INTO personnel (mail, password, nom, prenom, numero_telephone, date_naissance, role, id_etablissement) VALUES (?,?,?,?,?,?,?,?);`
 
-// --- FONCTION ---
+// --- ROUTER ---
 exports.signin = (req, res) => {
     const token = jwt.sign({ 'iss': 'JWT course', "id": req.id, "role": req.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
     res.cookie('userToken', token).status(200).json({ message: 'You are connected' })
@@ -60,7 +60,7 @@ exports.signout = (req, res) => {
     }).status(200).json({ message: 'You are disconnected' });
 }
 
-// --- FUNCTIONS ---  
+// --- FUNCTIONS TypeORM ---  
 async function createPersonnel(mail, password, nom, prenom, numero_telephone, date_naissance, role, id_etablissement, res) {
     try {
         const personnelRepository = AppDataSource.getRepository("Personnel");
