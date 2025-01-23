@@ -5,19 +5,19 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const commonEnum = require('../enum')
 
+const AppDataSource = require("../data-source");
+const { Personnel } = require("../entities/Personnel");
+
 // --- REQUETES ---
 const sqlAddAccount = `INSERT INTO personnel (mail, password, nom, prenom, numero_telephone, date_naissance, role, id_etablissement) VALUES (?,?,?,?,?,?,?,?);`
 
 // --- FONCTION ---
 exports.signin = (req, res) => {
-    console.log("id ", req.id)
-    console.log("role", req.role)
     const token = jwt.sign({ 'iss': 'JWT course', "id": req.id, "role": req.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
     res.cookie('userToken', token).status(200).json({ message: 'You are connected' })
 }
 
 exports.signup = async (req, res) => {
-    console.log(req.body)
     let temp_username = req.body.prenom;
 
     let nom = req.body.nom
@@ -39,15 +39,13 @@ exports.signup = async (req, res) => {
     
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-            console.log(salt)
-            db.query(sqlAddAccount, [mail, hash, nom, prenom, numero_telephone, date_naissance, role, id_etablissement], (err, results, fields) => {
-                if(!err){
-                    res.status(200).json({results})
-                }else{
-                    console.log(err)
-                    res.status(500).json(err)
-                }
-            })
+            if (err) {
+                res.status(500).json({ error: "Internal Server Error" });
+            } else {
+
+            }
+
+            createPersonnel(mail, hash, nom, prenom, numero_telephone, date_naissance, role, id_etablissement, res)
         });
     });
 }
@@ -61,3 +59,28 @@ exports.signout = (req, res) => {
         sameSite: 'strict'
     }).status(200).json({ message: 'You are disconnected' });
 }
+
+// --- FUNCTIONS ---  
+async function createPersonnel(mail, password, nom, prenom, numero_telephone, date_naissance, role, id_etablissement, res) {
+    try {
+        const personnelRepository = AppDataSource.getRepository("Personnel");
+    
+        const newPersonnel = personnelRepository.create({
+          mail: mail,
+          password: password,
+          nom: nom,
+          prenom: prenom,
+          numero_telephone: numero_telephone,
+          date_naissance: date_naissance,
+          id_etablissement, id_etablissement,
+          role: role,
+        });
+    
+        await personnelRepository.save(newPersonnel);
+        res.status(201).json(newPersonnel);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  

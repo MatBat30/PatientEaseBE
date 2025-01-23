@@ -77,7 +77,7 @@ exports.verifyUserExist = (req, res, next) => {
   db.query('SELECT * FROM utilisateur WHERE id_utilisateur = ?', [idUtilisateur], (err, result) => {
     if (err) {
         console.log(err);
-        return res.status(500).json({ message: "Erreur serveur" });
+        return res.status(500).json({ message: "Erreur serveur"});
     }
 
     if (result.length === 0) {
